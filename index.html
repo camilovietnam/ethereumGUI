@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>EthereumGUI</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row mb-4" id="image">
+            <div class="col text-center"><img class="mb-3 border-bottom border-dark pb-4 mt-2" src="assets/img/download.png"></div>
+        </div>
+        <div class="row border border-secondary rounded m-2 p-1" id="console">
+            <div class="col">
+                <h4 class="text-center h-100" style="color: var(--gray);">Last network block:&nbsp;<span id="span-current-block">10</span></h4>
+            </div>
+        </div>
+        <div class="row border border-secondary rounded m-2 p-1" id="addresses">
+            <div class="col-sm-6 col-md-6">
+                <h3 class="mb-0">Address list</h3>
+                <ul id="list-addresses">
+                    <li><strong>Address 1</strong>: 60 Ether&nbsp;<i class="fa fa-pencil mx-1 btn-edit-address"></i><i class="fa fa-remove mx-1 btn-delete-address"></i><button class="btn btn-secondary btn-sm btn-transfer" type="button">Transfer</button><br>&nbsp; &nbsp;address: 0x123...abc</li>
+                    <li><strong>Address 2</strong>: 60 Ether&nbsp;<i class="fa fa-pencil mx-1 btn-edit-address"></i><i class="fa fa-remove mx-1 btn-delete-address"></i><button class="btn btn-secondary btn-sm btn-transfer" type="button">Transfer</button><br>&nbsp; address: 0x345...987</li>
+                    <li><strong>Account</strong> 1: 60 Ether&nbsp;<i class="fa fa-pencil mx-1 btn-edit-address"></i><i class="fa fa-remove mx-1 btn-delete-address"></i><button class="btn btn-secondary btn-sm btn-transfer" type="button">Transfer</button><br>&nbsp; address: 0x345...987</li>
+                </ul>
+                <p class="text-center"><span id="span-reload-balances">Reload all balances&nbsp;<i class="fa fa-refresh"></i></span></p>
+            </div>
+            <div class="col-sm-6 col-md-6">
+                <h4>Add a new address</h4><input type="text" id="input-address" class="form-control my-1" placeholder="address"><button class="btn btn-dark" id="btn-add-address" type="button my-1">Add</button>
+            </div>
+        </div>
+        <div class="row border border-secondary rounded m-2 p-1" id="nodes">
+            <div class="col-sm-6 col-md-6">
+                <h3 class="mb-0">Node list</h3>
+                <ul id="list-nodes">
+                    <li><strong>Node 1</strong>: Active&nbsp;<i class="fa fa-stop mx-1 btn-stop-node"></i><i class="fa fa-remove mx-1 btn-delete-node"></i><button class="btn btn-secondary btn-sm btn-start-mining" type="button">Start mining</button><br>&nbsp; 192.168.1.12:3333</li>
+                    <li><strong>Node 2</strong>: Active&nbsp;<i class="fa fa-stop mx-1 btn-stop-node"></i><i class="fa fa-remove mx-1 btn-delete-node"></i><button class="btn btn-secondary btn-sm btn-start-mining" type="button">Start mining</button><br>&nbsp; 192.168.1.12:3333</li>
+                    <li><strong>Node 3</strong>: Active&nbsp;<i class="fa fa-stop mx-1 btn-stop-node"></i><i class="fa fa-remove mx-1 btn-delete-node"></i><button class="btn btn-danger btn-sm btn-start-mining" type="button">Stop mining</button><br>&nbsp; 192.168.1.12:3333</li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-md-6">
+                <h4>Add a new node</h4><input type="text" id="input-node-address" class="form-control my-1" placeholder="address"><input type="text" id="input-node-port" class="form-control my-1" placeholder="port"><button class="btn btn-dark" id="btn-add-node" type="button my-1">Add</button>
+            </div>
+        </div>
+        <div class="row border border-secondary rounded m-2 p-1" id="console">
+            <div class="col">
+                <h3>Console</h3><textarea id="console" class="form-control mb-2" rows="10"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="edit-account">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change account</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4 col-sm-3 col-xl-3 control-label"><label class="col-form-label">Alias</label></div>
+                            <div class="col-8 col-sm-9"><input type="text" class="form-control"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Save</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
