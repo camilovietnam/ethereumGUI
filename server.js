@@ -12,6 +12,10 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 
+app.get("/balance/:address", function (req, res) {
+  res.send("Chingado");
+});
+
 app.listen(port, function () {
   console.log(`Server running in port ${port}`);
 });
