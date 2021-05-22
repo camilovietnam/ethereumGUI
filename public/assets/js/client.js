@@ -1,5 +1,6 @@
 let nodes = [];
 let addresses = [];
+const SERVER_URL = "http://localhost:8080";
 
 $(function () {
   $("#btn-add-address").on("click", addNewAddress);
@@ -10,6 +11,10 @@ $(function () {
 
   $(document).on("click", ".btn-delete-address", deleteAddressListItem);
   $(document).on("click", ".btn-delete-node", deleteNodeListItem);
+  $(document).on("click", ".btn-close-alert", closeAlert);
+  $(document).on("click", ".btn-ping-node", pingNode);
+  $(document).on("click", ".btn-start-mining", startMining);
+  $(document).on("click", ".btn-stop-mining", stopMining);
 });
 
 function addNewNode() {
@@ -20,7 +25,7 @@ function addNewNode() {
     return;
   }
 
-  nodes.push([newNodeAddress, newNodePort]);
+  nodes.push({ address: newNodeAddress, port: newNodePort });
 
   rebuildNodeList();
 
@@ -75,11 +80,12 @@ function rebuildAddressList() {
 function buildNodeListItem(node, index) {
   return `<li id="list-nodes-${index}">
             <strong>Node ${index}</strong>: Active&nbsp;
-            <i class="fa fa-stop mx-1 btn-stop-node"></i>
-            <i class="fa fa-remove mx-1 btn-delete-node"></i>
+            <i class="fa fa-stop btn-stop-node mx-1 cursor-pointer"></i>
+            <i class="fa fa-remove btn-delete-node mx-1 cursor-pointer"></i>
+            <i class="fa fa-retweet btn-ping-node mx-1 cursor-pointer"></i>
             <button class="btn btn-secondary btn-sm btn-start-mining" type="button">Start mining</button>
             <br>
-            &nbsp; ${node[0]}:${node[1]}
+            &nbsp; ${node["address"]}:${node["port"]}
           </li>`;
 }
 
@@ -121,4 +127,54 @@ function openEditAddressModal() {
 
 function openTransferModal() {
   $("#modal-transfer").modal("show");
+}
+
+function log(message) {
+  const textArea = $("#textarea-console");
+  textArea.val(textArea.val() + `\n${message}`);
+  textArea.scrollTop(textArea[0].scrollHeight);
+}
+
+function closeAlert(event) {
+  const target = event.currentTarget;
+  $(target).parent(".alert").hide();
+}
+
+function pingNode(event) {
+  $("#alert-node-respond").hide();
+  $("#alert-node-dont-respond").hide();
+
+  const elmNode = $(event.currentTarget).parent("li");
+  const nodeIndex = elmNode[0].id.replace("list-nodes-", "");
+  const objNode = nodes[nodeIndex];
+  const url = SERVER_URL + `/node/ping/${objNode.address}/${objNode.port}`;
+
+  $.get(url, {}, function (res) {
+    if (res.alive) {
+      $("#alert-node-respond").show();
+      $("#span-current-block").text(res.lastBlock).fadeOut(100).fadeIn(100);
+    } else {
+      $("#alert-node-dont-respond").show();
+    }
+  });
+}
+
+function startMining(event) {
+  const elmButton = $(event.currentTarget);
+  const elmNode = elmButton.parent("li");
+
+  elmButton
+    .removeClass("btn-secondary btn-start-mining")
+    .addClass("btn-danger btn-stop-mining")
+    .text("Stop mining");
+}
+
+function stopMining(event) {
+  const elmButton = $(event.currentTarget);
+  const elmNode = elmButton.parent("li");
+
+  elmButton
+    .removeClass("btn-danger btn-stop-mining")
+    .addClass("btn-secondary btn-start-mining")
+    .text("Start mining");
 }

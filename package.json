@@ -5,7 +5,8 @@
   "main": "server.js",
   "dependencies": {
     "express": "^4.17.1",
-    "web3": "^1.3.6"
+    "web3": "^1.3.6",
+    "web3admin": "^0.4.4"
   },
   "devDependencies": {},
   "scripts": {
