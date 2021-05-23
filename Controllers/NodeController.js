@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-const web3Admin = require("web3admin.js");
+const web3Admin = require("web3admin");
 
 const NodeController = {
   pingNode: async function (req, res) {

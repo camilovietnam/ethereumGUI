@@ -2,16 +2,19 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const NodeController = require("./Controllers/NodeController");
+const cors = require("cors");
 
 app.use(express.static("public"));
+app.use(cors());
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/balance/:address", function (req, res) {
-  res.send("Chingado");
+  res.send("Balance not implemented");
 });
+``;
 
 /**
  * Node routes
