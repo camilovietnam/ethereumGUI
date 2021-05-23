@@ -1,5 +1,7 @@
 let nodes = [];
 let addresses = [];
+let balances = [];
+
 const SERVER_URL = "http://localhost:8080";
 
 $(function () {
@@ -33,7 +35,7 @@ function addNewNode() {
   $("#input-node-port").val("");
 }
 
-function addNewAddress() {
+async function addNewAddress() {
   const newAddress = $("#input-address").val();
 
   if (newAddress === "") {
@@ -47,7 +49,8 @@ function addNewAddress() {
   $("#input-address").val("");
 }
 
-function rebuildNodeList() {
+async function rebuildNodeList() {
+  $("ul#list-nodes li").remove();
   $("ul#list-nodes li").remove();
 
   if (nodes.length === 0) {
@@ -55,14 +58,19 @@ function rebuildNodeList() {
     return;
   }
 
-  nodes.forEach(function (node, index) {
+  nodes.forEach(async function (node, index) {
     const newLisItem = $(buildNodeListItem(node, index));
+    const response = await $.get(`/node/ping/${node.address}/${node.port}`);
+
+    if (response && response.lastBlock) {
+      $("#span-current-block").text(response.lastBlock);
+    }
 
     $("ul#list-nodes").append(newLisItem);
   });
 }
 
-function rebuildAddressList() {
+async function rebuildAddressList() {
   $("ul#list-addresses li").remove();
 
   if (addresses.length === 0) {
@@ -70,9 +78,8 @@ function rebuildAddressList() {
     return;
   }
 
-  addresses.forEach(function (address, index) {
-    const newLisItem = $(buildAddressListItem(address, index));
-
+  addresses.forEach(async function (address, index) {
+    const newLisItem = $(await buildAddressListItem(address, index));
     $("ul#list-addresses").append(newLisItem);
   });
 }
@@ -89,9 +96,11 @@ function buildNodeListItem(node, index) {
           </li>`;
 }
 
-function buildAddressListItem(address, index) {
+async function buildAddressListItem(address, index) {
+  const balance = await getBalance(address);
+
   return `<li id="list-address-${index}">
-                <strong>Address ${index}</strong>: 0 Ether&nbsp;
+                <strong>Address ${index}</strong>: ${balance} Ether&nbsp;
                 <i class="fa fa-pencil mx-1 btn-edit-address"></i>
                 <i class="fa fa-remove mx-1 btn-delete-address"></i>
                 <button class="btn btn-secondary btn-sm btn-transfer" type="button">Transfer</button>
@@ -177,4 +186,39 @@ function stopMining(event) {
     .removeClass("btn-danger btn-stop-mining")
     .addClass("btn-secondary btn-start-mining")
     .text("Start mining");
+}
+
+async function getBalance(address) {
+  if (nodes.length === 0) {
+    alert("No active nodes were found");
+  }
+
+  const url = SERVER_URL + `/address/${address}/balance`;
+  let nodeIndex = 0;
+  let node = null;
+  let nodePort = null;
+  let nodeAddress = null;
+  let balance = 0;
+  let data = {};
+  let response;
+
+  while (!balance && nodeIndex <= nodes.length - 1) {
+    node = nodes[nodeIndex];
+    nodeAddress = node["address"];
+    nodePort = node["port"];
+
+    data = {
+      nodeAddress,
+      nodePort,
+    };
+
+    response = await $.get(url, data);
+    nodeIndex++;
+
+    if (response && response.balance) {
+      balance = response.balance;
+    }
+  }
+
+  return balance;
 }
