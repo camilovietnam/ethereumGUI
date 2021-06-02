@@ -8,3 +8,4 @@ Planned functionality:
 - Ping node for network information
 - Transfer Ethereum from one address to another
 
+![Preview](https://raw.githubusercontent.com/camilovietnam/ethereumGUI/master/public/assets/img/preview.jpg)
